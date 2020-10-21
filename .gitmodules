@@ -1,0 +1,33 @@
+[submodule "deps/migen"]
+	path = deps/migen
+	url = https://github.com/m-labs/migen.git
+[submodule "deps/litex"]
+	path = deps/litex
+	url = https://github.com/enjoy-digital/litex.git
+[submodule "deps/litedram"]
+	path = deps/litedram
+	url = https://github.com/enjoy-digital/litedram.git
+[submodule "deps/litex_boards"]
+	path = deps/litex_boards
+	url = https://github.com/litex-hub/litex-boards.git
+[submodule "deps/lxsocdoc"]
+	path = deps/lxsocdoc
+	url = https://github.com/litex-hub/lxsocdoc
+[submodule "deps/encrypt-bitstream-python"]
+	path = deps/encrypt-bitstream-python
+	url = https://github.com/betrusted-io/encrypt-bitstream-python.git
+[submodule "deps/gateware"]
+	path = deps/gateware
+	url = https://github.com/betrusted-io/gateware.git
+[submodule "deps/valentyusb"]
+	path = deps/valentyusb
+	url = https://github.com/betrusted-io/valentyusb.git
+[submodule "deps/pythondatat-cpu-vexriscv"]
+	path = deps/pythondata-cpu-vexriscv/
+	url = https://github.com/betrusted-io/pythondata-cpu-vexriscv.git
+[submodule "deps/compiler-rt"]
+	path = deps/compiler-rt
+	url = https://github.com/litex-hub/pythondata-software-compiler_rt.git
+[submodule "deps/litescope"]
+	path = deps/litescope
+	url = https://github.com/enjoy-digital/litescope

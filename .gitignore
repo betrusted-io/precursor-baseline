@@ -1,0 +1,30 @@
+*~
+/build/*
+__pycache__/
+/.Xil/*
+/.idea/*
+*.d
+*.o
+pycharm.env
+*.bin
+*.elf
+*.jou
+*.log
+*.map
+run/
+target/
+/venv/*
+/test/
+
+bin/
+
+# betrusted-pac is auto-generated
+fw/betrusted-pac/
+
+# these are the user-local fuse ROM keys. my.nky is the input, encrypted.nky is the output (which has HMAC and IV folded in)
+my.nky
+encrypted.nky
+
+# in general, we don't want this
+Cargo.lock
+

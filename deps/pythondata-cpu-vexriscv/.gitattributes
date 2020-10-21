@@ -1,0 +1,13 @@
+**/verilog/**/*.v          linguist-language=Verilog
+**/verilog/**/*.vh         linguist-language=Verilog
+
+**/system_verilog/**/*.v   linguist-language=SystemVerilog
+**/system_verilog/**/*.sv  linguist-language=SystemVerilog
+**/system_verilog/**/*.vh  linguist-language=SystemVerilog
+
+**/vhdl/**/*.vhdl          linguist-language=VHDL
+**/vhdl/**/*.vh            linguist-language=VHDL
+
+**/gen-src/**              linguist-vendored
+**/generated/**            linguist-vendored
+**/third_party/**          linguist-vendored

@@ -1,0 +1,3 @@
+[submodule "litex/data/cpu/vexriscv/verilog/ext/VexRiscv"]
+	path = pythondata_cpu_vexriscv/verilog/ext/VexRiscv
+	url = https://github.com/betrusted-io/VexRiscv.git

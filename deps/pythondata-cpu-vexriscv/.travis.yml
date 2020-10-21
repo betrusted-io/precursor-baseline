@@ -1,0 +1,25 @@
+# Always clone the full depth so git-describe works.
+git:
+  depth: false
+
+language: python
+python:
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "3.8"
+  - "nightly"  # nightly build
+  - "pypy3"
+
+install:
+  - python setup.py install
+
+script:
+  - python test.py
+
+deploy:
+  provider: pypi
+  username: __token__
+  distributions: sdist bdist_wheel
+  skip_existing: true
+  edge: true # opt in to dpl v2
