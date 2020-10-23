@@ -847,7 +847,7 @@ class BetrustedSoC(SoCCore):
         from valentyusb.usbcore.cpu import dummyusb
         usb_pads = platform.request("usb")
         usb_iobuf = usbio.IoBuf(usb_pads.d_p, usb_pads.d_n, usb_pads.pullup_p)
-        self.submodules.usb = dummyusb.DummyUsb(usb_iobuf, debug=True, cdc=True, relax_timing=True)
+        self.submodules.usb = dummyusb.DummyUsb(usb_iobuf, debug=True, cdc=True, relax_timing=True, product="Precursor Baseline")
         self.add_wb_master(self.usb.debug_bridge.wishbone)
         # debug bridge data and address settle multiple cycles before being accessed
         self.platform.add_platform_command('set_false_path -rise_from [get_clocks usb_12] -rise_to [get_clocks sys_clk] -through [get_pins {net}*/D]', net=self.usb.debug_bridge.wishbone.adr)
