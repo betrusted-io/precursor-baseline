@@ -3,7 +3,7 @@
 	url = https://github.com/m-labs/migen.git
 [submodule "deps/litex"]
 	path = deps/litex
-	url = https://github.com/enjoy-digital/litex.git
+	url = https://github.com/betrusted-io/litex.git
 [submodule "deps/litedram"]
 	path = deps/litedram
 	url = https://github.com/enjoy-digital/litedram.git
