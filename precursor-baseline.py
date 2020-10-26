@@ -75,8 +75,8 @@ _io_pvt = [   # PVT-generation I/Os
     ),
 
     ("usb", 0,
-         Subsignal("d_p", Pins("C1"), IOStandard("LVCMOS33"), Misc("DRIVE=12")),      # DVT
-         Subsignal("d_n", Pins("B1"), IOStandard("LVCMOS33"), Misc("DRIVE=12")),      # DVT
+         Subsignal("d_p", Pins("C1"), IOStandard("LVCMOS33"), Misc("DRIVE=4")),      # DVT
+         Subsignal("d_n", Pins("B1"), IOStandard("LVCMOS33"), Misc("DRIVE=4")),      # DVT
          Subsignal("pullup_p", Pins("D1"), IOStandard("LVCMOS33"), Misc("DRIVE=4")),  # DVT
          Misc("SLEW=SLOW"),
      ),
@@ -706,12 +706,11 @@ class BetrustedSoC(SoCCore):
 
         # all multiregs are false paths by definition. Make it explicit.
         self.platform.add_platform_command('set_false_path -through [get_nets *xilinxmultiregimpl*_regs0]') # covers sys-to-other
-        self.platform.add_platform_command('set_false_path -through [get_pins *xilinxmultiregimpl*_regs0_reg/D]') # covers other-to-sys
+        self.platform.add_platform_command('set_false_path -through [get_pins *xilinxmultiregimpl*_regs0_reg*/D]') # covers other-to-sys
 
         # External SRAM ----------------------------------------------------------------------------
         # Note that page_rd_timing=2 works, but is a slight overclock on RAM. Cache fill time goes from 436ns to 368ns for 8 words.
-        self.submodules.sram_ext = sram_32.SRAM32(platform.request("sram"), rd_timing=7, wr_timing=6, page_rd_timing=53)  # this works with 2:nbits page length with Rust firmware...
-        #self.submodules.sram_ext = sram_32.SRAM32(platform.request("sram"), rd_timing=7, wr_timing=6, page_rd_timing=5)  # this worked with 3:nbits page length in C firmware
+        self.submodules.sram_ext = sram_32.SRAM32(platform.request("sram"), rd_timing=7, wr_timing=6, page_rd_timing=6)  # this works with 2:nbits page length with Rust firmware...
         self.add_csr("sram_ext")
         self.register_mem("sram_ext", self.mem_map["sram_ext"], self.sram_ext.bus, size=0x1000000)
         # A bit of a bodge -- the path is actually async, so what we are doing is trying to constrain intra-channel skew by pushing them up against clock limits
@@ -847,17 +846,10 @@ class BetrustedSoC(SoCCore):
         from valentyusb.usbcore.cpu import dummyusb
         usb_pads = platform.request("usb")
         usb_iobuf = usbio.IoBuf(usb_pads.d_p, usb_pads.d_n, usb_pads.pullup_p)
-        self.submodules.usb = dummyusb.DummyUsb(usb_iobuf, debug=True, cdc=True, relax_timing=True, product="Precursor Baseline")
+        self.submodules.usb = dummyusb.DummyUsb(usb_iobuf, debug=True, burst=True, cdc=True, relax_timing=True, product="Precursor Baseline")
         self.add_wb_master(self.usb.debug_bridge.wishbone)
-        # debug bridge data and address settle multiple cycles before being accessed
-        self.platform.add_platform_command('set_false_path -rise_from [get_clocks usb_12] -rise_to [get_clocks sys_clk] -through [get_pins {net}*/D]', net=self.usb.debug_bridge.wishbone.adr)
-        self.platform.add_platform_command('set_false_path -rise_from [get_clocks usb_12] -rise_to [get_clocks sys_clk] -through [get_pins {net}*/D]', net=self.usb.debug_bridge.wishbone.dat_w)
-        self.platform.add_platform_command('set_false_path -rise_from [get_clocks usb_12] -rise_to [get_clocks sys_clk] -through [get_pins {net}*/D]', net=self.usb.debug_bridge.wishbone.sel)
-        # rd_data_sys is basically static, there are 100's of ns from stabilization to use, so make it a false path
-        self.platform.add_platform_command('set_false_path -rise_from [get_clocks sys_clk] -rise_to [get_clocks usb_12] -through [get_nets {net}*]', net=self.usb.debug_bridge.rd_data_sys)
-        # these CDCs are a false path
-        self.platform.add_platform_command('set_false_path -rise_from [get_clocks usb_12] -rise_to [get_clocks sys_clk] -through [get_nets {net}*]', net=self.usb.debug_bridge.wishbone.we)
-        self.platform.add_platform_command('set_false_path -rise_from [get_clocks usb_12] -rise_to [get_clocks sys_clk] -through [get_nets {net}*]', net=self.usb.debug_bridge.cmd)
+        self.platform.add_platform_command('set_false_path -rise_from [get_clocks usb_12] -rise_to [get_clocks sys_clk] -through [get_pins {net}_reg*/D]', net=self.usb.debug_bridge.write_fifo.dout)
+        self.platform.add_platform_command('set_false_path -rise_from [get_clocks sys_clk] -rise_to [get_clocks usb_12] -through [get_pins {net}_reg*/D]', net=self.usb.debug_bridge.read_fifo.dout)
 
 # Build --------------------------------------------------------------------------------------------
 
